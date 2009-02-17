@@ -1,0 +1,3 @@
+USER = 'you@example.com'
+PASSWORD = 'xxxxxxxxxxxxxxx'
+API_ENDPOINT = 'http://[your harvest].harvestapp.com'
