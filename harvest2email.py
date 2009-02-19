@@ -19,15 +19,22 @@ def main():
     opener = urllib2.build_opener()
     opener.addheaders = HEADERS
 
-    for i in reversed(range(0, 5)):
+    day_week_started = (TODAY - datetime.timedelta(days=TODAY.weekday())).timetuple()[8]
+    for i in reversed(range(day_week_started, day_week_started + 7)):
         day = (TODAY - datetime.timedelta(days=i)).strftime('/%j/%Y')
         req = urllib2.Request(settings.API_ENDPOINT + '/daily' + day)
         r = opener.open(req)
 
         data = simplejson.loads(''.join(r.readlines()))
-        print data['for_day']
-        for entry in data['day_entries']:
-            print '  %s %s: %s hours' % (entry['client'], entry['project'], entry['hours'], )
+        if data['day_entries']:
+            print data['for_day']
+            for entry in data['day_entries']:
+                print ('  %s:' % entry['project']).ljust(28),
+                print '%1.2f hours' % entry['hours'],
+                if entry['notes']:
+                    print '(%s)' % entry['notes']
+                else:
+                    print
 
 
 if __name__ == '__main__':
